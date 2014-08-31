@@ -65,7 +65,7 @@ module.exports = function() {
 
 		getList : function( finish ) {
 			var collection = this.db.collection('users');
-			collection.find().toArray(function(err, results) {
+			collection.find({}, { password: 0}).toArray(function(err, results) {
 				finish( err, results );	
 			});
 		},
@@ -78,7 +78,12 @@ module.exports = function() {
 				if ( err ) {
 					done( err );
 				} else {
-					var user = rows[0];
+					//var user = user
+					console.log('phone: ' + phone);
+					console.log( 'password: ' + password );
+					console.log( 'usr:' );
+					console.log( user );
+
 					var userPassword;
 					if ( !user ) {
 						return done( null, false );

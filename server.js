@@ -3,6 +3,7 @@ var express = require('express'),
 	nconf = require('nconf'),
 	serveStatic = require('serve-static'),
 	async = require('async'),
+	crypto = require('crypto'),
 	bodyParser = require('body-parser'),
 	path = require('path'),
 	passport = require('passport'),
@@ -29,7 +30,7 @@ function ensureAuthenticated( req, res, next ) {
 }
 
 passport.use( new LocalStrategy({
-		usernameField: 'email',
+		usernameField: 'phone',
 		passwordField: 'password'
 	},
 	function( email, password, done ) {
@@ -139,7 +140,7 @@ app.post('/api/user', function( req, res ) {
 	var user = {
 		phone : req.body.phone,
 		name : req.body.name,
-		passport : req.body.password,
+		password : req.body.password,
 		info : req.body.info,
 		route : req.body.route
 	}
@@ -150,6 +151,10 @@ app.post('/api/user', function( req, res ) {
 			res.json( 200, createdUser );	
 		}
 	});
+});
+
+app.get( '/system/currentUser', function(req, res) {
+	res.json( 200, req.user );
 });
 
 app.get('/api', function(req, res) {
