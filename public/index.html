@@ -119,7 +119,7 @@ var userCoords = [52.431195,30.993827];
 	}
 
 function init() {
-    var searchMap = new ymaps.Map("map", {
+    window.searchMap = new ymaps.Map("map", {
 		center: userCoords,
 		zoom: 13,
 		controls:[]
@@ -158,18 +158,18 @@ jQuery(function($){
 
 	$.get('/api/users', function(routes){
 		window.routes = routes;
-
-				
-		routePromisesArray = routes.map(function(route){
-			return ymaps.route(route.route).then(function (res) {
-				routeList.push({
-								id:route['_id'], 
-								geoQuery:generateGeoQuery(res)
-							});
+		ymaps.ready(function(){
+			routePromisesArray = routes.map(function(route){
+				return ymaps.route(route.route).then(function (res) {
+					routeList.push({
+									id:route['_id'], 
+									geoQuery:generateGeoQuery(res)
+								});
+				});
 			});
-		});
-		Promise.all(routePromisesArray, function(){
-			doSearch();
+			Promise.all(routePromisesArray, function(){
+				doSearch();
+			});
 		});
 	});
 
