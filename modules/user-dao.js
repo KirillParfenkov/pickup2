@@ -65,7 +65,7 @@ module.exports = function() {
 
 		getList : function( finish ) {
 			var collection = this.db.collection('users');
-			collection.find().toArray(function(err, results) {
+			collection.find({}, { password: 0}).toArray(function(err, results) {
 				finish( err, results );	
 			});
 		},

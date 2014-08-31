@@ -153,6 +153,10 @@ app.post('/api/user', function( req, res ) {
 	});
 });
 
+app.get( '/system/currentUser', function(req, res) {
+	res.json( 200, req.user );
+});
+
 app.get('/api', function(req, res) {
 	res.send(200, 'Api is runnig!');
 });
