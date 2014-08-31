@@ -1,5 +1,16 @@
 @bodyBackground: url(/images/body_background.png);
 @globalActiveBackgroundColor: #63AEEF;
+
+@font-face {
+    font-family: 'proxima-nova-semibold-header';
+    src: url('proximanova-semibold-webfont.eot');
+    src: url('proximanova-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('proximanova-semibold-webfont.woff') format('woff'),
+         url('proximanova-semibold-webfont.ttf') format('truetype');
+    font-weight: normal !important;
+    font-style: normal;
+
+}
 .clearfix:after{
 	content: '.';
 	display: block;
@@ -51,21 +62,30 @@ section{
 }
 ul{
 	list-style-type: none;
+	padding: 0;
 	li.person{	
 		border: 1px solid #000;
+		color: black;
+		background: #fff;
+		font-family: 'proxima-nova-semibold-header';
+		font-size: 20px;
 		span{
 			display: inline-block;
 		}
 		.info, .name{
 			width: 60%;
 			margin-left: 10px;
+			font-weight: bold;
 		}
 		.time, .number{
 			float: right;
 			margin-right: 10px
 		}
 		.description{
-			margin: 0 10px;
+			margin: 0 100px;
+		}
+		.wrap_adress{
+			border-bottom: 1px solid #ccc;
 		}
 
 	}
