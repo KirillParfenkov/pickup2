@@ -51,18 +51,25 @@ section{
 }
 ul{
 	list-style-type: none;
-	li{	
+	li.person{	
+		border: 1px solid #000;
 		span{
 			display: inline-block;
 		}
 		.info, .name{
 			width: 60%;
+			margin-left: 10px;
 		}
-		.time{
+		.time, .number{
+			float: right;
+			margin-right: 10px
+		}
+		.description{
+			margin: 0 10px;
+		}
 
-		}
-		.number{
-
-		}
+	}
+	li:last-child{
+		border-radius: 0 0 15px 15px;
 	}
 }
