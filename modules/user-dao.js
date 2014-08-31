@@ -78,7 +78,12 @@ module.exports = function() {
 				if ( err ) {
 					done( err );
 				} else {
-					var user = rows[0];
+					//var user = user
+					console.log('phone: ' + phone);
+					console.log( 'password: ' + password );
+					console.log( 'usr:' );
+					console.log( user );
+
 					var userPassword;
 					if ( !user ) {
 						return done( null, false );
