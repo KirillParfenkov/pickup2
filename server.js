@@ -140,11 +140,15 @@ app.post('/api/user', function( req, res ) {
 		phone : req.body.phone,
 		name : req.body.name,
 		passport : req.body.password,
-		info : req.body.info
+		info : req.body.info,
+		route : req.body.route
 	}
 	userDao.insert( user, function( err, createdUser) {
-		if ( err )  res.json( err );
-		res.json( 200, createdUser );
+		if ( err )  {
+			res.json( err );
+		} else {
+			res.json( 200, createdUser );	
+		}
 	});
 });
 
