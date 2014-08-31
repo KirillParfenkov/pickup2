@@ -1,5 +1,5 @@
 @bodyBackground: url(/images/body_background.png);
-
+@globalActiveBackgroundColor: #63AEEF;
 .clearfix:after{
 	content: '.';
 	display: block;
@@ -14,22 +14,27 @@
 body{
 	background: @bodyBackground repeat;
 	background-size: contain;
-	#content{
-		.container{
-			max-width: 400px;
+}
+/* navigation style*/
+.topbar{
+	background: #222;
+	border-color: #101010;
+	border-bottom: none;
+}
+.navbar{
+	border-top: none;
+	border-bottom: none;
+	border-radius: 0;
+	li.active{
+		background-color: #63AEEF;
+		border-bottom: 2px solid yellow;
+		a{
+
 		}
 	}
-	@media screen and (max-width: 800px){
-	section{
-		margin: 0 5%;
-	}
+	.form-control{
+		border-color:yellow;
 	}
 }
-/**
-* Styles for registration form
-*/
-body{
-	.regForm{
 
-	}
-}
+/*end nav style*/
