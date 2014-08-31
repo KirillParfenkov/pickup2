@@ -1,0 +1,35 @@
+@bodyBackground: url(/images/body_background.png);
+
+.clearfix:after{
+	content: '.';
+	display: block;
+	height: 0px;
+	width: 0px;
+	visibility: hidden;
+	clear: both;
+}
+/**
+* Styles for login form
+*/
+body{
+	background: @bodyBackground repeat;
+	background-size: contain;
+	#content{
+		.container{
+			max-width: 400px;
+		}
+	}
+	@media screen and (max-width: 800px){
+	section{
+		margin: 0 5%;
+	}
+	}
+}
+/**
+* Styles for registration form
+*/
+body{
+	.regForm{
+
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"port": 8080,
+	"db" : {
+		"name" : "pickup",
+		"host" : "localhost",
+		"port" : 27017
+	}
+}
