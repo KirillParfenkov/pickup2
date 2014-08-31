@@ -48,46 +48,134 @@
             <!-- End Topbar Navigation -->
         </div>
     </div>
-<div class="container globalMap">  
-    
+<div class="container globalMap" id="map">
 </div>
-<div class="time">
-   <input type="number" step="100" value="200" min="100"/>
-</div>
+<select onchange="searchArea.geometry.setRadius(this.value); doSearch();">
+		<option value="100">100м</option>
+		<option value="200">200м</option>
+		<option value="500">500м</option>
+		<option value="1000">1000м</option>
+	</select>
 <section>
     <div class="container">		
     	<div class="row">
-            <ul>
-                <li class="person">
-                    <div class="wrap_adress">
-                        <span class="info">kosareva 6a</span>
-                        <span class="time">12:05</span>
-                    </div>
-                    <div class="wrap_person">
-                        <span class="name">pavel rusinov</span>
-                        <span class="number">+37529979992</span>
-                    </div>
-                    <div class="description">
-                        klhn adja oida jas djoa sjd as djiaji sa diasoid oas diha dasud
-                    </div>
-                </li>
-            </ul>    
+        <ul id="result">
+			
+        </ul>    
         </div><!--/row-->
     </div>
 </section>
 	
-
+		<div id="person-template" style="display:none;">
+			<li class="person">
+				<div class="wrap_adress">
+					<span class="info">kosareva 6a</span>
+					<span class="time">12:05</span>
+				</div>
+				<div class="wrap_person">
+					<span class="name">pavel rusinov</span>
+					<span class="number">+37529979992</span>
+				</div>
+				<div class="description">
+					klhn adja oida jas djoa sjd as djiaji sa diasoid oas diha dasud
+				</div>
+			</li>
+		</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://www.fuelcdn.com/fuelux/3.0.0/js/fuelux.min.js"></script>    
-    
-	<script src="scripts/Model.js"></script>
-	<script src="scripts/Controller.js"></script>
-	<script src="scripts/application.js"></script>
+     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
+<script type="text/javascript">
+ymaps.ready(init);
+
+var routeList = [];
+var searchArea;
+var userCoords = [52.431195,30.993827];
+
+	function doSearch(){
+		result = [];
+		routeList.forEach(function (route){
+			objectsInCircle = route.geoQuery.searchInside(searchArea),
+			boundaryObjects = route.geoQuery.searchIntersect(searchArea);
+			/*boundaryObjects.setOptions({
+				strokeColor: '#06ff00',
+				preset: 'islands#greenIcon'
+			});
+			objectsInCircle.setOptions({
+				strokeColor: '#ff0005',
+				preset: 'islands#redIcon'
+			});*/
+			if(objectsInCircle.getLength() + boundaryObjects.getLength() > 0){
+				result.push(route.id);
+			}
+		});
+		console.log(result);
+		$(".result-entity").hide();
+		$("#"+result.join(", #")).show().addClass("filtered");
+	}
+
+function init() {
+    var searchMap = new ymaps.Map("map", {
+		center: userCoords,
+		zoom: 13,
+		controls:[]
+	});
+
+	searchArea = new ymaps.Circle([userCoords, 100], null , {draggable: true});
+	
+	searchArea.events.add(['dragend'], doSearch);
+
+	searchMap.geoObjects.add(searchArea);
+}	
+
+function generateGeoQuery(res){
+	var pathsObjects = ymaps.geoQuery(res.getPaths()),
+		edges = [];
+		
+	pathsObjects.each(function (path) {
+		var coordinates = path.geometry.getCoordinates();
+		for (var i = 1, l = coordinates.length; i < l; i++) {
+			edges.push({
+				type: 'LineString',
+				coordinates: [coordinates[i], coordinates[i - 1]]
+			});
+		}
+	});
+	
+	var routeObjects = ymaps.geoQuery(edges)
+			.add(res.getWayPoints())
+			.add(res.getViaPoints())
+			.setOptions('strokeWidth', 3)
+			.addToMap(searchMap);
+	return routeObjects;
+}
+
+jQuery(function($){
+
+	$.get('/api/users', function(routes){
+		window.routes = routes;
+
+				
+		routePromisesArray = routes.map(function(route){
+			return ymaps.route(route.route).then(function (res) {
+				routeList.push({
+								id:route['_id'], 
+								geoQuery:generateGeoQuery(res)
+							});
+			});
+		});
+		Promise.all(routePromisesArray, function(){
+			doSearch();
+		});
+	});
+
+});
+
+</script>
 
   </body>
 </html>
